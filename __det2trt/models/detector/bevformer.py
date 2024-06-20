@@ -4,7 +4,7 @@ from third_party.bev_mmdet3d import BEVFormer
 from third_party.bev_mmdet3d.core.bbox import bbox3d2result
 
 
-@DETECTORS.register_module()
+# @DETECTORS.register_module()
 class BEVFormerTRT(BEVFormer):
     def __init__(self, *args, **kwargs):
         super(BEVFormerTRT, self).__init__(*args, **kwargs)

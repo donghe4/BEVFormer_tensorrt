@@ -17,5 +17,5 @@ done
 echo "Running on the GPU: $gpu_id"
 
 CUDA_VISIBLE_DEVICES=$gpu_id python tools/bevformer/evaluate_pth.py \
-configs/bevformer/bevformer_base_trt.py \
+configs/bevformer/bevformer_base.py \
 checkpoints/pytorch/bevformer_r101_dcn_24ep.pth

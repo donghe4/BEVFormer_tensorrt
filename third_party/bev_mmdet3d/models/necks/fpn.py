@@ -156,6 +156,8 @@ class CustomFPN(BaseModule):
 
     @auto_fp16()
     def forward(self, inputs):
+        ## dhe::debug
+        import pdb; pdb.set_trace()
         """Forward function."""
         assert len(inputs) == len(self.in_channels)
 

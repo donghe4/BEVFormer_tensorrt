@@ -85,6 +85,10 @@ class PerceptionTransformer(BaseModule):
         if self.can_bus_norm:
             self.can_bus_mlp.add_module("norm", nn.LayerNorm(self.embed_dims))
 
+        ## dhe: add reg
+        num_register_tokens =4
+        self.register_tokens = nn.Parameter(torch.randn(num_register_tokens, self.embed_dims))
+
     def init_weights(self):
         """Initialize the transformer weights."""
         for p in self.parameters():
@@ -173,6 +177,12 @@ class PerceptionTransformer(BaseModule):
         can_bus = self.can_bus_mlp(can_bus)[None, :, :]
         bev_queries = bev_queries + can_bus * self.use_can_bus
 
+        ## dhe: reg token for query
+        reg_tokens = self.register_tokens
+        # reg_tokens_queries = reg_tokens.unsqueeze(1).repeat(1, 2, 1)
+        # bev_queries = torch.cat((bev_queries,reg_tokens_queries), 0)
+
+         
         feat_flatten = []
         spatial_shapes = []
         for lvl, feat in enumerate(mlvl_feats):
@@ -196,6 +206,10 @@ class PerceptionTransformer(BaseModule):
         feat_flatten = feat_flatten.permute(
             0, 2, 1, 3
         )  # (num_cam, H*W, bs, embed_dims)
+
+        ## dhe: reg token for feat
+        reg_tokens_feat = reg_tokens.unsqueeze(1).repeat(6, 1, bs, 1)
+        feat_flatten = torch.cat((feat_flatten,reg_tokens_feat), 1)
 
         bev_embed = self.encoder(
             bev_queries,

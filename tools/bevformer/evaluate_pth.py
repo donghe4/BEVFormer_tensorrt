@@ -36,12 +36,13 @@ def main():
 
         sys.path.append(".")
         if isinstance(config.plugin, list):
-            for plu in config.plugin:
-                importlib.import_module(plu)
+            pass
+            # for plu in config.plugin:
+            #     importlib.import_module(plu)
         else:
             importlib.import_module(config.plugin)
 
-    model = build_model(config.model, test_cfg=config.get("test_cfg", None))
+    model = build_model(config.model, train_cfg=config.get("test_cfg", None))
     checkpoint = load_checkpoint(model, checkpoint_file, map_location="cpu")
 
     dataset = build_dataset(cfg=config.data.val)
@@ -60,9 +61,9 @@ def main():
         # segmentation dataset has `PALETTE` attribute
         model.PALETTE = dataset.PALETTE
 
-    model.forward = model.forward_trt
+    # model.forward = model.forward_trt
     model.eval()
-    model = MMDataParallel(model.cuda())
+    # model = MMDataParallel(model.cuda())
 
     ts = []
     results = []

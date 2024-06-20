@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  bev:
+    container_name: bev_0620_$USER
+    image: bev_0620_$USER
+    build:
+      context: ./
+      dockerfile: dockerfile_A100_training
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ '0' ]
+              capabilities: [ gpu, compute, utility, graphics ]
+    volumes:
+      - ./:/workspace/
+      - /data:/data
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - ~/.Xauthority:/root/.Xauthority:ro
+    network_mode: host
+    environment:
+      - "DISPLAY"
+      - "LIBGL_ALWAYS_INDIRECT=1"
+    command: tail -f /dev/null
+    ipc: host
+    privileged: true

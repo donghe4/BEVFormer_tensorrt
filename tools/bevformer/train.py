@@ -114,17 +114,17 @@ def main():
 
         import_modules_from_strings(**cfg["custom_imports"])
 
-    # import modules from plguin/xx, registry will be updated
-    if hasattr(cfg, "plugin"):
-        import importlib
-        import sys
+    # # import modules from plguin/xx, registry will be updated
+    # if hasattr(cfg, "plugin"):
+    #     import importlib
+    #     import sys
 
-        sys.path.append(".")
-        if isinstance(cfg.plugin, list):
-            for plu in cfg.plugin:
-                importlib.import_module(plu)
-        else:
-            importlib.import_module(cfg.plugin)
+    #     sys.path.append(".")
+    #     if isinstance(cfg.plugin, list):
+    #         for plu in cfg.plugin:
+    #             importlib.import_module(plu)
+    #     else:
+    #         importlib.import_module(cfg.plugin)
 
     # set cudnn_benchmark
     if cfg.get("cudnn_benchmark", False):
@@ -206,7 +206,7 @@ def main():
     )
     model.init_weights()
 
-    logger.info(f"Model:\n{model}")
+    # logger.info(f"Model:\n{model}")
     datasets = [build_dataset(cfg.data.train)]
     if len(cfg.workflow) == 2:
         val_dataset = copy.deepcopy(cfg.data.val)
